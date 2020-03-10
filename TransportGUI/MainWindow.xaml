@@ -7,6 +7,23 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Content="Start / Ziel" Grid.Row="0"/>
+            <Button Content="Station" Grid.Row="1"/>
+            <Button Content="Planer" Grid.Row="2"/>
+            <Button Content="Abfahrtstafel" Grid.Row="3"/>
+
+        </Grid>
+
     </Grid>
 </Window>
