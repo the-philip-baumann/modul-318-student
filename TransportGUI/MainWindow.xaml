@@ -24,6 +24,30 @@
             <Button Content="Abfahrtstafel" Grid.Row="3"/>
 
         </Grid>
+        <GroupBox Header="" HorizontalAlignment="Right" Width="579" Grid.Column="1"  Name="GroupBoxContentStartZiel">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="0.7*"/>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="0.5*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="1" Grid.Row="1" Content="Station" FontSize="25" Name="labelStation"></Label>
+                <TextBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" Name="textBoxSearchValue"></TextBox>
+                <Button Grid.Row="2" Grid.Column="4" Content="Suchen" Name="buttonSearch" Click="searchStationByName"/>
+                <ListBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="2" Name="listBoxResult"></ListBox>
+            </Grid>
+        </GroupBox>
 
     </Grid>
 </Window>
