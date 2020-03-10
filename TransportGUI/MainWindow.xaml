@@ -18,13 +18,13 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button Content="Start / Ziel" Grid.Row="0"/>
-            <Button Content="Station" Grid.Row="1"/>
-            <Button Content="Planer" Grid.Row="2"/>
-            <Button Content="Abfahrtstafel" Grid.Row="3"/>
+            <Button Content="Connection" Grid.Row="0" Click="navigate"/>
+            <Button Content="Station" Grid.Row="1" Click="navigate"/>
+            <Button Content="Planer" Grid.Row="2" Click="navigate"/>
+            <Button Content="Abfahrtstafel" Grid.Row="3" Click="navigate"/>
 
         </Grid>
-        <GroupBox Header="" HorizontalAlignment="Right" Width="579" Grid.Column="1"  Name="GroupBoxContentStartZiel">
+        <GroupBox Header="" HorizontalAlignment="Right" Width="579" Grid.Column="1"  Name="groupBoxStation">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="0.5*"/>
@@ -45,7 +45,66 @@
                 <Label Grid.Column="1" Grid.Row="1" Content="Station" FontSize="25" Name="labelStation"></Label>
                 <TextBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" Name="textBoxSearchValue"></TextBox>
                 <Button Grid.Row="2" Grid.Column="4" Content="Suchen" Name="buttonSearch" Click="searchStationByName"/>
-                <ListBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="2" Name="listBoxResult"></ListBox>
+                <ListBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="2" Name="listBoxStationResult"></ListBox>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Name="groupBoxConnection">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="7*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Start" Grid.Row="1" Grid.Column="1" FontSize="25" Name="labelStart"/>
+                    <Label Content="Ziel" Grid.Row="1" Grid.Column="4" FontSize="25" Name="labelZiel"/>
+                    <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Name="comboBoxStart" FontSize="25" IsEditable="True"/>
+                    <ComboBox Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" Name="comboBoxZiel" FontSize="25" IsEditable="True"></ComboBox>
+                    <Button Grid.Row="3" Grid.Column="7" Content="Suchen" Name="buttonSuchen" Click="searchConnectionByStartAndDestinationStation" Height="43" VerticalAlignment="Top"></Button>
+                </Grid>
+                <ListBox Name="listBoxConnectionResult" Grid.Row="1" Grid.Column="1"></ListBox>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Name="groupBoxAbfahrtstafel" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.3*"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="0.3*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="0.5*"/>
+                </Grid.ColumnDefinitions>
+                <Label Name="labelStationBoardStation" Grid.Column="1" Grid.Row="1" Content="Station" FontSize="25"/>
+                <TextBox Name="textBoxStationBoardSearchValue" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2"/>
+                <Button Name="buttonSearchAbfahrtsTafel" Grid.Column="4" Grid.Row="2" FontSize="25" Content="Suchen" Click="searchStationBoardByStationName"/>
+                <ListBox Name="listBoxAbfahrtsTafelResult" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="4"></ListBox>
             </Grid>
         </GroupBox>
 
