@@ -63,7 +63,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SearchSingleStation.cs" />
+    <Compile Include="ApiSearches.cs" />
+    <Compile Include="Navigation.cs" />
     <Compile Include="TransportException.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

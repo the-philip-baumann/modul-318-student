@@ -42,7 +42,7 @@
                     <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="1" Grid.Row="1" Content="Station" FontSize="25" Name="labelStation"></Label>
-                <ComboBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Name="comboBoxStationSearchValue" IsEditable="True" KeyDown="autocomplateSearchString" IsTextSearchEnabled="False" ></ComboBox>
+                <ComboBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Name="comboBoxStationSearchValue" IsEditable="True" KeyDown="autocomplateSearchString" IsTextSearchEnabled="False" SelectionChanged="selectionChangedStationSearch"></ComboBox>
                 <Button Grid.Row="2" Grid.Column="3" Content="Suchen" Name="buttonSearch" Click="searchStationByName"/>
                 <Button Grid.Row="2" Grid.Column="4" Content="Google Maps" Name="buttonGoogleMaps" Click="showStationLocation"/>
                 <ListBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="2" Name="listBoxStationResult"></ListBox>
@@ -88,7 +88,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <DatePicker Grid.Column="1" Name="DatePicker" MouseLeave="setDate"/>
+                    <DatePicker Grid.Column="1" Name="datePicker"/>
                     <ComboBox Name="comboBoxTimepicker" Grid.Column="3"/>
                 </Grid>
                
@@ -116,7 +116,7 @@
                     <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
                 <Label Name="labelStationBoardStation" Grid.Column="1" Grid.Row="1" Content="Station" FontSize="25"/>
-                <ComboBox Name="textBoxStationBoardSearchValue" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" IsTextSearchEnabled="False" IsEditable="True" KeyDown="autocomplateSearchString"/>
+                <ComboBox Name="comboBoxBoardSearchValue" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" IsTextSearchEnabled="False" IsEditable="True" KeyDown="autocomplateSearchString"/>
                 <Button Name="buttonSearchAbfahrtsTafel" Grid.Column="4" Grid.Row="2" FontSize="25" Content="Suchen" Click="searchStationBoardByStationName"/>
                 <ListBox Name="listBoxAbfahrtsTafelResult" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="4"></ListBox>
             </Grid>

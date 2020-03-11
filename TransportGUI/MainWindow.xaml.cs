@@ -31,6 +31,7 @@ namespace TransportGUI {
             setupClasses();
             setupNavigation();
             setTimeInComboBox();
+            disableButtons();
         }
 
         private void setupClasses () {
@@ -50,6 +51,11 @@ namespace TransportGUI {
             groupBoxAbfahrtstafel.Visibility = Visibility.Hidden;
         }
 
+        private void disableButtons () {
+            buttonSearch.IsEnabled = false;
+            buttonGoogleMaps.IsEnabled = false;
+        }
+
         // Click event
         private void searchStationByName(object sender, RoutedEventArgs e) {
             Stations stations = apiSearches.searchForStation(comboBoxStationSearchValue.Text);
@@ -63,6 +69,7 @@ namespace TransportGUI {
             List<Station> listStations = stations.StationList;
             // Check if response contains a result and is not empty
             if (listStations.Count != 0) {
+                listBoxStationResult.Items.Clear();
                 foreach (Station station in listStations) {
                     // Companys, Monuments and other places do not posess an id
                     if (station.Id != null) {
@@ -80,12 +87,23 @@ namespace TransportGUI {
             // Save values in Membervariables
             string start = comboBoxStart.Text;
             string destination = comboBoxZiel.Text;
-            date = DateTime.Parse(date + " " + comboBoxTimepicker.SelectedValue.ToString());
-            List<Connection> connections = apiSearches.searchForConnection(start, destination, date);
-            // If validation failed
-            if (connections != null) {
-                displayConnectionsOnResultGrid(connections);
+            if (start.Length != 0 && destination.Length != 0 && datePicker.SelectedDate != null && comboBoxTimepicker.SelectedValue != null)  {
+                if (datePicker.SelectedDate < new DateTime()) {
+                    date = DateTime.Parse(datePicker.SelectedDate.Value.ToString().Substring(0, 8)
+                        + " " + comboBoxTimepicker.SelectedValue.ToString());
+                    List<Connection> connections = apiSearches.searchForConnection(start, destination, date);
+                    // If validation failed
+                    if (connections != null) {
+                        displayConnectionsOnResultGrid(connections);
+                    }
+                } else {
+                    new TransportException("Verbindungen können nicht angezeigt werden", "Datum darf nicht in der vergangenheit liegen");
+                }
+              
+            } else {
+                new TransportException("Verbindungen können nicht angezeigt werden", "Füllen sie alle Felder aus");
             }
+
         }
 
         // Click events 
@@ -123,6 +141,13 @@ namespace TransportGUI {
         // KeyDown event
         private void autocomplateSearchString (object sender, KeyEventArgs e) {
             var comboBox = sender as ComboBox;
+            if (comboBox.Text.Length >= 2) {
+                buttonSearch.IsEnabled = true;
+                buttonGoogleMaps.IsEnabled = true;
+            } else {
+                buttonSearch.IsEnabled = false;
+                buttonGoogleMaps.IsEnabled = false;
+            }
             comboBox.IsDropDownOpen = true;
             List<Station> stations = transport.GetStations(comboBox.Text).StationList;
             comboBox.Items.Clear();
@@ -138,8 +163,7 @@ namespace TransportGUI {
         private void setDate (object sender, MouseEventArgs e) {
             var datepicker = sender as DatePicker;
             // manipulate datepicker value
-            string stringDate = datepicker.SelectedDate.Value.ToString();
-            yearMonthDay = stringDate.Substring(0, 8);
+           
         }
 
         private void setTimeInComboBox () {
@@ -162,10 +186,23 @@ namespace TransportGUI {
             // search station and pull out the x and y coordinates
             List<Station> stations = apiSearches.searchForStation(searchValue).StationList;
             Station station = stations.Find(x => x.Name == searchValue);
-            string xCoordinates = station.Coordinate.XCoordinate.ToString().Replace(",", ".");
-            string yCoordinates = station.Coordinate.YCoordinate.ToString().Replace(",", ".");
-            // start chrome.exe and call google maps api and pass the arguments
-            Process.Start("chrome.exe", "https://www.google.ch/maps/search/?api=1&query=" + xCoordinates + "," + yCoordinates);
+            if (station != null) {
+                string xCoordinates = station.Coordinate.XCoordinate.ToString().Replace(",", ".");
+                string yCoordinates = station.Coordinate.YCoordinate.ToString().Replace(",", ".");
+                // start chrome.exe and call google maps api and pass the arguments
+                Process.Start("https://www.google.ch/maps/search/?api=1&query=" + xCoordinates + "," + yCoordinates);
+            } else {
+                new TransportException("Station kann nicht angezeigt werden", "Bitte geben sie einen vollständigen Namen der Station an");
+            }
+          
+        }
+
+        private void selectionChangedStationSearch (object sender, SelectionChangedEventArgs e) {
+            var comboBox = sender as ComboBox;
+            if (comboBox.SelectedValue != null) {
+                comboBoxStationSearchValue.Text = comboBox.SelectedValue.ToString();
+            }
+            
         }
     }
 }
