@@ -21,24 +21,39 @@ namespace TransportGUI {
     /// </summary>
     public partial class MainWindow : Window {
         Transport transport;
+        ApiSearches apiSearches;
+        Navigation navigation;
         List<GroupBox> navigationItems = new List<GroupBox>();
         string yearMonthDay;
         private DateTime date;
         public MainWindow() {
             InitializeComponent();
+            setupClasses();
+            setupNavigation();
+            setTimeInComboBox();
+        }
+
+        private void setupClasses () {
+            // instantiate Classes
             transport = new Transport();
+            apiSearches = new ApiSearches(transport);
+            navigation = new Navigation();
+        }
+
+        private void setupNavigation () {
+            // setup GUI visibility and add Groupboxes to list
             navigationItems.Add(groupBoxConnection);
             navigationItems.Add(groupBoxStation);
             navigationItems.Add(groupBoxAbfahrtstafel);
             groupBoxConnection.Visibility = Visibility.Hidden;
             groupBoxStation.Visibility = Visibility.Visible;
             groupBoxAbfahrtstafel.Visibility = Visibility.Hidden;
-            setTimeInComboBox();
         }
 
-
-        private void searchStationByName (object sender, RoutedEventArgs e) {
-            Stations stations = searchForStation(comboBoxStationSearchValue.Text);
+        // Click event
+        private void searchStationByName(object sender, RoutedEventArgs e) {
+            Stations stations = apiSearches.searchForStation(comboBoxStationSearchValue.Text);
+            // If validation failed
             if (stations != null) {
                 displayStationsOnListBox(stations);
             }
@@ -49,30 +64,46 @@ namespace TransportGUI {
             // Check if response contains a result and is not empty
             if (listStations.Count != 0) {
                 foreach (Station station in listStations) {
+                    // Companys, Monuments and other places do not posess an id
                     if (station.Id != null) {
                         listBoxStationResult.Items.Add(station.Name.ToString());
                     }
                 }
             } else {
+                // Feedback
                 new TransportException("Keine Ergebnisse gefunden", "Für Ihre Suchanfrage wurde kein Ergebnis gefunden");
             }
         }
 
+        // Click Events
         private void searchConnectionByStartAndDestinationStation (object sender, RoutedEventArgs e) {
+            // Save values in Membervariables
             string start = comboBoxStart.Text;
             string destination = comboBoxZiel.Text;
-            if (start.Length != 0 && destination.Length != 0 && date != null) {
-                
-                List<Connection> connections = transport.GetConnections(start, destination, transformDateTime(yearMonthDay, comboBoxTimepicker.SelectedValue.ToString())).ConnectionList;
+            date = DateTime.Parse(date + " " + comboBoxTimepicker.SelectedValue.ToString());
+            List<Connection> connections = apiSearches.searchForConnection(start, destination, date);
+            // If validation failed
+            if (connections != null) {
                 displayConnectionsOnResultGrid(connections);
-            } else {
-                new TransportException("Datum, Start, oder Ziel sind leer", "Füllen sie alle Felder: Start- Ziel- und Datefeld aus");
             }
-          
-            
+        }
+
+        // Click events 
+        private void searchStationBoardByStationName(object sender, RoutedEventArgs e) {
+            // search for stationboards and display them afterwards
+            List<StationBoard> stationBoards = apiSearches.searchForStationBoard(comboBoxBoardSearchValue.Text);
+            displayStationBoard(stationBoards);
+        }
+
+        private void displayStationBoard (List<StationBoard> stationBoards) {
+            // display connections
+            foreach (StationBoard station in stationBoards) {
+                listBoxAbfahrtsTafelResult.Items.Add(station.To.ToString() + "  :  " + station.Name);
+            }
         }
 
         private void displayConnectionsOnResultGrid (List<Connection> connections) {
+            // display connections if matches where found
             if (connections.Count != 0) {
                 foreach (Connection connection in connections) {
                     Console.WriteLine(connection.From);
@@ -81,35 +112,21 @@ namespace TransportGUI {
             }
         }
 
+        // Click event
         private void navigate (object sender, RoutedEventArgs e) {
+            // Change tab
             var button = sender as Button;
-            foreach (GroupBox box in navigationItems) {
-                if (box.Name.ToString() == "groupBox" + button.Content.ToString()) {
-                    box.Visibility = Visibility.Visible;
-                } else {
-                    box.Visibility = Visibility.Hidden;
-                }
-            }
+            navigation.navigate(navigationItems, button.Content.ToString());
         }
 
-        private void searchStationBoardByStationName (object sender, RoutedEventArgs e) {
-            if (textBoxStationBoardSearchValue.Text.Length != 0) {
-                StationBoardRoot stationBoardRoot = transport.GetStationBoard(textBoxStationBoardSearchValue.Text, "0");
-                List<StationBoard> stationBoards = stationBoardRoot.Entries.ToList<StationBoard>();
-                foreach (StationBoard station in stationBoards) {
-                    Console.WriteLine(stationBoardRoot.Station.Name + station.Name + station.To.ToString() + station.Category.ToString());
-                    listBoxAbfahrtsTafelResult.Items.Add(stationBoardRoot.Station.Name.ToString() + "  -->  " + station.To.ToString() + "  :  " + station.Name);
-                }
-            } else {
-                new TransportException("Keine Ergebnisse gefunden", "Für Ihre Suchanfrage wurde kein Ergebnis gefunden");
-            }
-        }
-
+       
+        // KeyDown event
         private void autocomplateSearchString (object sender, KeyEventArgs e) {
             var comboBox = sender as ComboBox;
             comboBox.IsDropDownOpen = true;
             List<Station> stations = transport.GetStations(comboBox.Text).StationList;
             comboBox.Items.Clear();
+            // display all mathes in combobox
             foreach (Station station in stations) {
                 if (station.Id != null) {
                     comboBox.Items.Add(station.Name);
@@ -117,19 +134,20 @@ namespace TransportGUI {
             }
         }
 
+        // leave event
         private void setDate (object sender, MouseEventArgs e) {
             var datepicker = sender as DatePicker;
+            // manipulate datepicker value
             string stringDate = datepicker.SelectedDate.Value.ToString();
-           
             yearMonthDay = stringDate.Substring(0, 8);
-            
-            //transformDateTime(date);
         }
 
         private void setTimeInComboBox () {
+            // Date with time 0 hours, 0 minutes and 0 seconds
             DateTime dateTime = new DateTime(2020, 01, 01);
+            //Display 25 hours
             for (int i = 0; i < 25; i++) {
-               
+                // Add a 0 zero to the hours so it can be parsed to a DateTime objects later
                 if (i < 10) {
                     comboBoxTimepicker.Items.Add("0" + dateTime.AddHours(i).Hour + ":00");
                 } else {
@@ -138,31 +156,16 @@ namespace TransportGUI {
             }
         }
 
-        private DateTime transformDateTime (string date, string time) {
-            Console.WriteLine(date + " " + time);
-            return DateTime.Parse(date + " " + time);
-        }
-
+        // Show location of a station
         private void showStationLocation (object sender, RoutedEventArgs e) {
             string searchValue = comboBoxStationSearchValue.Text;
-            List<Station> stations = searchForStation(searchValue).StationList;
+            // search station and pull out the x and y coordinates
+            List<Station> stations = apiSearches.searchForStation(searchValue).StationList;
             Station station = stations.Find(x => x.Name == searchValue);
             string xCoordinates = station.Coordinate.XCoordinate.ToString().Replace(",", ".");
             string yCoordinates = station.Coordinate.YCoordinate.ToString().Replace(",", ".");
+            // start chrome.exe and call google maps api and pass the arguments
             Process.Start("chrome.exe", "https://www.google.ch/maps/search/?api=1&query=" + xCoordinates + "," + yCoordinates);
-        }
-
-
-        private Stations searchForStation (string searchValue) {
-            if (searchValue.Length != 0) {
-                // Call webservice with the users query
-                string query = searchValue;
-                Stations station = transport.GetStations(query);
-                return station;
-            } else {
-                new TransportException("Textbox ist leer", "Geben sie eine Station an!");
-                return null;
-            }
         }
     }
 }

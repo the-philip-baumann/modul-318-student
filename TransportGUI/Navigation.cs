@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TransportGUI {
-    class SearchSingleStation {
-
+    class Navigate {
     }
 }
