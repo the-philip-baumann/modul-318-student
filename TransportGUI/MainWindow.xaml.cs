@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SwissTransport;
+using System.Diagnostics;
 
 namespace TransportGUI {
     /// <summary>
@@ -37,13 +38,9 @@ namespace TransportGUI {
 
 
         private void searchStationByName (object sender, RoutedEventArgs e) {
-            if (textBoxSearchValue.Text.Length != 0) {
-                // Call webservice with the users query
-                string query = textBoxSearchValue.Text;
-                Stations station = transport.GetStations(query);
-                displayStationsOnListBox(station);
-            } else {
-                new TransportException("Textbox ist leer", "Geben sie eine Station an!");
+            Stations stations = searchForStation(comboBoxStationSearchValue.Text);
+            if (stations != null) {
+                displayStationsOnListBox(stations);
             }
         }
 
@@ -144,6 +141,28 @@ namespace TransportGUI {
         private DateTime transformDateTime (string date, string time) {
             Console.WriteLine(date + " " + time);
             return DateTime.Parse(date + " " + time);
+        }
+
+        private void showStationLocation (object sender, RoutedEventArgs e) {
+            string searchValue = comboBoxStationSearchValue.Text;
+            List<Station> stations = searchForStation(searchValue).StationList;
+            Station station = stations.Find(x => x.Name == searchValue);
+            string xCoordinates = station.Coordinate.XCoordinate.ToString().Replace(",", ".");
+            string yCoordinates = station.Coordinate.YCoordinate.ToString().Replace(",", ".");
+            Process.Start("chrome.exe", "https://www.google.ch/maps/search/?api=1&query=" + xCoordinates + "," + yCoordinates);
+        }
+
+
+        private Stations searchForStation (string searchValue) {
+            if (searchValue.Length != 0) {
+                // Call webservice with the users query
+                string query = searchValue;
+                Stations station = transport.GetStations(query);
+                return station;
+            } else {
+                new TransportException("Textbox ist leer", "Geben sie eine Station an!");
+                return null;
+            }
         }
     }
 }
