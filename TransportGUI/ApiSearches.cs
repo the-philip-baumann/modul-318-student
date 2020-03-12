@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SwissTransport;
+using System.Windows;
 
 
 
@@ -11,11 +12,12 @@ namespace TransportGUI {
     class ApiSearches {
 
         private Transport transport;
-        public ApiSearches (Transport transport) {
+        public ApiSearches(Transport transport) {
             this.transport = transport;
         }
 
-        public Stations searchForStation (string searchValue) {
+        public Stations searchForStation(string searchValue) {
+
             if (searchValue.Length != 0) {
                 // Call webservice with the users query
                 string query = searchValue;
@@ -28,7 +30,8 @@ namespace TransportGUI {
             }
         }
 
-        public List<Connection> searchForConnection (string start, string destination, DateTime date) {
+        public List<Connection> searchForConnection(string start, string destination, DateTime date) {
+
             if (start.Length != 0 && destination.Length != 0 && date != null) {
                 // Call webservice
                 List<Connection> connections = transport.GetConnections(start, destination, date).ConnectionList;
@@ -38,9 +41,11 @@ namespace TransportGUI {
                 new TransportException("Datum, Start, oder Ziel sind leer", "Füllen sie alle Felder: Start- Ziel- und Datefeld aus");
                 return null;
             }
+
+
         }
 
-        public List<StationBoard> searchForStationBoard (string searchValue) {
+        public List<StationBoard> searchForStationBoard(string searchValue) {
             if (searchValue.Length != 0) {
                 // Call webservice
                 StationBoardRoot stationBoardRoot = transport.GetStationBoard(searchValue, "");

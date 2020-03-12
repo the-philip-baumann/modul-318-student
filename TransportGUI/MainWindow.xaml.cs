@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SwissTransport;
 using System.Diagnostics;
+using System.Net;
 
 namespace TransportGUI {
     /// <summary>
@@ -87,23 +88,37 @@ namespace TransportGUI {
             // Save values in Membervariables
             string start = comboBoxStart.Text;
             string destination = comboBoxZiel.Text;
-            if (start.Length != 0 && destination.Length != 0 && datePicker.SelectedDate != null && comboBoxTimepicker.SelectedValue != null)  {
-                if (datePicker.SelectedDate < new DateTime()) {
+            if (start.Length != 0 && destination.Length != 0)  {
+                if (datePicker.SelectedDate == null && comboBoxTimepicker.SelectedValue == null) {
+                    date = DateTime.Now;
+                    searchForAndDisplayConnectionCalls(start, destination, date);
+                    Console.WriteLine(date);
+                } else if (datePicker.SelectedDate == null || comboBoxTimepicker.SelectedValue == null) {
+                    new TransportException("Verbindungen konnten nicht angezeight werden", "Wenn ein Datum angegeben wird, müssen die Zeit als auch das Datum angegeben werden");
+                } else if (datePicker.SelectedDate != null && comboBoxTimepicker.SelectedValue != null) {
+                    Console.WriteLine(datePicker.SelectedDate);
+                    Console.WriteLine(comboBoxTimepicker.SelectedValue);
+                    Console.WriteLine(date);
                     date = DateTime.Parse(datePicker.SelectedDate.Value.ToString().Substring(0, 8)
                         + " " + comboBoxTimepicker.SelectedValue.ToString());
-                    List<Connection> connections = apiSearches.searchForConnection(start, destination, date);
-                    // If validation failed
-                    if (connections != null) {
-                        displayConnectionsOnResultGrid(connections);
+                    if (date > DateTime.Now) {
+                        searchForAndDisplayConnectionCalls(start, destination, date);
+                    } else {
+                        new TransportException("Verbindungen können nicht angezeigt werden", "Datum darf nicht in der vergangenheit liegen");
                     }
-                } else {
-                    new TransportException("Verbindungen können nicht angezeigt werden", "Datum darf nicht in der vergangenheit liegen");
                 }
-              
             } else {
                 new TransportException("Verbindungen können nicht angezeigt werden", "Füllen sie alle Felder aus");
             }
 
+        }
+
+        private void searchForAndDisplayConnectionCalls (string start, string destination, DateTime date) {
+            List<Connection> connections = apiSearches.searchForConnection(start, destination, date);
+            // If validation failed
+            if (connections != null) {
+                displayConnectionsOnResultGrid(connections);
+            }
         }
 
         // Click events 
@@ -140,23 +155,28 @@ namespace TransportGUI {
        
         // KeyDown event
         private void autocomplateSearchString (object sender, KeyEventArgs e) {
-            var comboBox = sender as ComboBox;
-            if (comboBox.Text.Length >= 2) {
-                buttonSearch.IsEnabled = true;
-                buttonGoogleMaps.IsEnabled = true;
-            } else {
-                buttonSearch.IsEnabled = false;
-                buttonGoogleMaps.IsEnabled = false;
-            }
-            comboBox.IsDropDownOpen = true;
-            List<Station> stations = transport.GetStations(comboBox.Text).StationList;
-            comboBox.Items.Clear();
-            // display all mathes in combobox
-            foreach (Station station in stations) {
-                if (station.Id != null) {
-                    comboBox.Items.Add(station.Name);
+            try {
+                var comboBox = sender as ComboBox;
+                if (comboBox.Text.Length >= 2) {
+                    buttonSearch.IsEnabled = true;
+                    buttonGoogleMaps.IsEnabled = true;
+                } else {
+                    buttonSearch.IsEnabled = false;
+                    buttonGoogleMaps.IsEnabled = false;
                 }
+                comboBox.IsDropDownOpen = true;
+                List<Station> stations = transport.GetStations(comboBox.Text).StationList;
+                comboBox.Items.Clear();
+                // display all mathes in combobox
+                foreach (Station station in stations) {
+                    if (station.Id != null) {
+                        comboBox.Items.Add(station.Name);
+                    }
+                }
+            } catch (WebException) {
+                new TransportException("Verbindungsaufbau fehlgeschlagen", "Überprüfen sie ihre Internetverbindung");
             }
+            
         }
 
         // leave event
