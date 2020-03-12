@@ -17,7 +17,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            
+
             <Button Content="Verbindung" Grid.Row="0" Click="navigate" TabIndex="1"/>
             <Button Content="Station" Grid.Row="1" Click="navigate" TabIndex="2"/>
             <Button Content="Abfahrtstafel" Grid.Row="3" Click="navigate" TabIndex="3"/>
@@ -52,7 +52,7 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="4*"/>
-                  
+
                     <RowDefinition Height="7*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
@@ -84,7 +84,7 @@
                     <ComboBox Grid.ColumnSpan="2" Name="comboBoxTimepicker" Grid.Column="4" Grid.Row="5" TabIndex="10"/>
                 </Grid>
                 <ListBox Name="listBoxConnectionResult" Grid.Row="2" Grid.Column="1" TabIndex="9" Margin="10,10,10,10"></ListBox>
-                
+
             </Grid>
         </GroupBox>
 
@@ -109,7 +109,7 @@
                 <Label Name="labelStationBoardStation" Grid.Column="1" Grid.Row="1" Content="Station" FontSize="25"/>
                 <ComboBox Name="comboBoxBoardSearchValue" TabIndex="4" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" IsTextSearchEnabled="False" IsEditable="True" KeyDown="autocomplateSearchString"/>
                 <Button Name="buttonSearchAbfahrtstafel" Grid.Column="4" TabIndex="5" Grid.Row="2" FontSize="20" Content="Suchen" Click="searchStationBoardByStationName" IsDefault="True"/>
-                <ListBox Name="listBoxAbfahrtsTafelResult" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="4" TabIndex="6"></ListBox>
+                <ListBox Name="listBoxAbfahrtsTafelResult" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="4" TabIndex="6" HorizontalAlignment="Left" Width="452" Margin="1,0,0,0"></ListBox>
             </Grid>
         </GroupBox>
 
