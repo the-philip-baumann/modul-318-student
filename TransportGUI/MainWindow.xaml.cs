@@ -45,10 +45,10 @@ namespace TransportGUI {
 
         private void setupNavigation () {
             // setup GUI visibility and add Groupboxes to list
-            navigationItems.Add(groupBoxConnection);
+            navigationItems.Add(groupBoxVerbindung);
             navigationItems.Add(groupBoxStation);
             navigationItems.Add(groupBoxAbfahrtstafel);
-            groupBoxConnection.Visibility = Visibility.Hidden;
+            groupBoxVerbindung.Visibility = Visibility.Hidden;
             groupBoxStation.Visibility = Visibility.Visible;
             groupBoxAbfahrtstafel.Visibility = Visibility.Hidden;
         }
@@ -131,14 +131,19 @@ namespace TransportGUI {
 
         private void displayStationBoard (List<StationBoard> stationBoards) {
             // display connections
+            listBoxAbfahrtsTafelResult.Items.Clear();
+            foreach (StationBoard stationBoard in stationBoards) {
+                listBoxAbfahrtsTafelResult.Items.Add(stationBoard.Name + " -> " + stationBoard.To + ": " + stationBoard.Operator);
+            }
         }
 
         private void displayConnectionsOnResultGrid (List<Connection> connections) {
             // display connections if matches where found
+            listBoxConnectionResult.Items.Clear();
             if (connections.Count != 0) {
                 foreach (Connection connection in connections) {
                     Console.WriteLine(connection.From);
-                    listBoxConnectionResult.Items.Add(connection.From.Station.Name + "  -->  " + connection.To.Station.Name.ToString() + "  :  " + connection.Duration);
+                    listBoxConnectionResult.Items.Add(connection.From.Station.Name + "  -->  " + connection.To.Station.Name.ToString() + "  ->  " + DateTime.Parse(connection.From.Departure).ToUniversalTime() + "  :  " + connection.Duration);
                 }
             }
         }
