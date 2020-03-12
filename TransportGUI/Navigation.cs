@@ -9,8 +9,6 @@ using System.Windows;
 namespace TransportGUI {
     class Navigation {
         public void navigate(List<GroupBox> navigationItems,string content) {
-
-           
             // Make Groupboxes visible and hide the rest
             foreach (GroupBox box in navigationItems) {
                 if (box.Name.ToString() == "groupBox" + content) {

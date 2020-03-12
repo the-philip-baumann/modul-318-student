@@ -18,9 +18,9 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             
-            <Button Content="Connection" Grid.Row="0" Click="navigate"/>
-            <Button Content="Station" Grid.Row="1" Click="navigate"/>
-            <Button Content="Abfahrtstafel" Grid.Row="3" Click="navigate"/>
+            <Button Content="Connection" Grid.Row="0" Click="navigate" TabIndex="1"/>
+            <Button Content="Station" Grid.Row="1" Click="navigate" TabIndex="2"/>
+            <Button Content="Abfahrtstafel" Grid.Row="3" Click="navigate" TabIndex="3"/>
 
         </Grid>
         <GroupBox Header="" HorizontalAlignment="Right" Width="579" Grid.Column="1"  Name="groupBoxStation">
@@ -42,10 +42,10 @@
                     <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="1" Grid.Row="1" Content="Station" FontSize="25" Name="labelStation"></Label>
-                <ComboBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Name="comboBoxStationSearchValue" IsEditable="True" KeyDown="autocomplateSearchString" IsTextSearchEnabled="False" SelectionChanged="selectionChangedStationSearch"></ComboBox>
-                <Button Grid.Row="2" Grid.Column="3" Content="Suchen" Name="buttonSearch" Click="searchStationByName"/>
-                <Button Grid.Row="2" Grid.Column="4" Content="Google Maps" Name="buttonGoogleMaps" Click="showStationLocation"/>
-                <ListBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="2" Name="listBoxStationResult"></ListBox>
+                <ComboBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" TabIndex="4" Name="comboBoxStationSearchValue" IsEditable="True" KeyDown="autocomplateSearchString" IsTextSearchEnabled="False" SelectionChanged="selectionChangedStationSearch"></ComboBox>
+                <Button Grid.Row="2" Grid.Column="3" TabIndex="5" Content="Suchen" Name="buttonStationSearch" Click="searchStationByName"/>
+                <Button Grid.Row="2" Grid.Column="4" TabIndex="6" Content="Google Maps" Name="buttonGoogleMaps" Click="showStationLocation"/>
+                <ListBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="2" TabIndex="7" Name="listBoxStationResult"></ListBox>
             </Grid>
         </GroupBox>
         <GroupBox Grid.Column="1" Name="groupBoxConnection">
@@ -76,9 +76,9 @@
                     </Grid.ColumnDefinitions>
                     <Label Content="Start" Grid.Row="1" Grid.Column="1" FontSize="25" Name="labelStart"/>
                     <Label Content="Ziel" Grid.Row="1" Grid.Column="4" FontSize="25" Name="labelZiel"/>
-                    <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Name="comboBoxStart" FontSize="25" IsEditable="True" KeyDown="autocomplateSearchString" IsTextSearchEnabled="False"/>
-                    <ComboBox Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" Name="comboBoxZiel" FontSize="25" IsEditable="True" KeyDown="autocomplateSearchString" IsTextSearchEnabled="False"/>
-                    <Button Grid.Row="3" Grid.Column="7" Content="Suchen" Name="buttonSuchen" Click="searchConnectionByStartAndDestinationStation" Height="43" VerticalAlignment="Top"></Button>
+                    <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" TabIndex="4" Name="comboBoxStart" FontSize="25" IsEditable="True" KeyDown="autocomplateSearchString" IsTextSearchEnabled="False"/>
+                    <ComboBox Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" TabIndex="5" Name="comboBoxZiel" FontSize="25" IsEditable="True" KeyDown="autocomplateSearchString" IsTextSearchEnabled="False"/>
+                    <Button Grid.Row="3" Grid.Column="7" Content="Suchen" TabIndex="8" Name="buttonConnectionSuchen" Click="searchConnectionByStartAndDestinationStation" Height="43" VerticalAlignment="Top"></Button>
                 </Grid>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
@@ -88,11 +88,11 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <DatePicker Grid.Column="1" Name="datePicker"/>
-                    <ComboBox Name="comboBoxTimepicker" Grid.Column="3"/>
+                    <DatePicker Grid.Column="1" Name="datePicker" TabIndex="6"/>
+                    <ComboBox Name="comboBoxTimepicker" Grid.Column="3" TabIndex="7"/>
                 </Grid>
                
-                <ListBox Name="listBoxConnectionResult" Grid.Row="2" Grid.Column="1"></ListBox>
+                <ListBox Name="listBoxConnectionResult" Grid.Row="2" Grid.Column="1" TabIndex="9"></ListBox>
                 
             </Grid>
         </GroupBox>
@@ -116,9 +116,9 @@
                     <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
                 <Label Name="labelStationBoardStation" Grid.Column="1" Grid.Row="1" Content="Station" FontSize="25"/>
-                <ComboBox Name="comboBoxBoardSearchValue" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" IsTextSearchEnabled="False" IsEditable="True" KeyDown="autocomplateSearchString"/>
-                <Button Name="buttonSearchAbfahrtsTafel" Grid.Column="4" Grid.Row="2" FontSize="25" Content="Suchen" Click="searchStationBoardByStationName"/>
-                <ListBox Name="listBoxAbfahrtsTafelResult" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="4"></ListBox>
+                <ComboBox Name="comboBoxBoardSearchValue" TabIndex="4" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" IsTextSearchEnabled="False" IsEditable="True" KeyDown="autocomplateSearchString"/>
+                <Button Name="buttonSearchAbfahrtstafel" Grid.Column="4" TabIndex="5" Grid.Row="2" FontSize="25" Content="Suchen" Click="searchStationBoardByStationName"/>
+                <ListBox Name="listBoxAbfahrtsTafelResult" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="4" TabIndex="6"></ListBox>
             </Grid>
         </GroupBox>
 

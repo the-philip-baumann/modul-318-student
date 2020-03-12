@@ -25,7 +25,8 @@ namespace TransportGUI {
         ApiSearches apiSearches;
         Navigation navigation;
         List<GroupBox> navigationItems = new List<GroupBox>();
-        string yearMonthDay;
+       
+        
         private DateTime date;
         public MainWindow() {
             InitializeComponent();
@@ -53,7 +54,7 @@ namespace TransportGUI {
         }
 
         private void disableButtons () {
-            buttonSearch.IsEnabled = false;
+            buttonStationSearch.IsEnabled = false;
             buttonGoogleMaps.IsEnabled = false;
         }
 
@@ -130,9 +131,6 @@ namespace TransportGUI {
 
         private void displayStationBoard (List<StationBoard> stationBoards) {
             // display connections
-            foreach (StationBoard station in stationBoards) {
-                listBoxAbfahrtsTafelResult.Items.Add(station.To.ToString() + "  :  " + station.Name);
-            }
         }
 
         private void displayConnectionsOnResultGrid (List<Connection> connections) {
@@ -158,10 +156,10 @@ namespace TransportGUI {
             try {
                 var comboBox = sender as ComboBox;
                 if (comboBox.Text.Length >= 2) {
-                    buttonSearch.IsEnabled = true;
+                    buttonStationSearch.IsEnabled = true;
                     buttonGoogleMaps.IsEnabled = true;
                 } else {
-                    buttonSearch.IsEnabled = false;
+                    buttonStationSearch.IsEnabled = false;
                     buttonGoogleMaps.IsEnabled = false;
                 }
                 comboBox.IsDropDownOpen = true;
